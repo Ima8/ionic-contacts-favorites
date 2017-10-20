@@ -20,7 +20,7 @@ import { FormsModule } from '@angular/forms';
 import { Camera } from '@ionic-native/camera'
 import { Geolocation } from '@ionic-native/geolocation'
 import { CallNumber } from '@ionic-native/call-number'
-
+import { ActionSheet } from '@ionic-native/action-sheet';
 @NgModule({
   declarations: [
     MyApp,
@@ -52,6 +52,7 @@ import { CallNumber } from '@ionic-native/call-number'
     SplashScreen,
     Camera,
     CallNumber,
+    ActionSheet,
     Geolocation,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ContactDataProvider

@@ -1,5 +1,8 @@
+import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
+
+import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 
 import { ContactDataProvider, Contact } from '../../providers/contact-data/contact-data';
 
@@ -24,7 +27,9 @@ export class ContactDetailPage {
     public navParams: NavParams,
     public contactData: ContactDataProvider,
     public alertCtrl: AlertController,
-    private callNumber: CallNumber) {
+    private callNumber: CallNumber,
+    private actionSheet: ActionSheet,
+    private camera: Camera) {
     this.contactDetail = this.navParams.get('contact');
     this.picture = this.contactData.getContactUrl() + 'contacts/img/' + this.contactDetail.firstname.toLowerCase() + '.jpeg';
   }
@@ -50,7 +55,37 @@ export class ContactDetailPage {
     // });
     // call.present();
   }
+  editPhoto() {
+    let buttonLabels = ['Take a photo', 'Choose a photo'];
 
+    const options: ActionSheetOptions = {
+      title: 'What do you want with this image?',
+      subtitle: 'Choose an action',
+      buttonLabels: buttonLabels,
+      androidTheme: this.actionSheet.ANDROID_THEMES.THEME_HOLO_DARK,
+      destructiveButtonLast: true
+    };
+
+    this.actionSheet.show(options).then((buttonIndex: number) => {
+      const sourceType = buttonIndex
+      const options: CameraOptions = {
+        quality: 100,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+        sourceType
+      }
+
+      this.camera.getPicture(options).then((imageData) => {
+        let base64Image = 'data:image/jpeg;base64,' + imageData;
+        console.log(base64Image);
+        this.picture = base64Image
+      }, (err) => {
+        // Handle error
+      });
+
+    });
+  }
   editContact() {
     this.navCtrl.push(ContactEditPage, { contact: this.contactDetail });
   }

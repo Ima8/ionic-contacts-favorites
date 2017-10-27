@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs' ;
+import { Storage } from '@ionic/storage'
 
 export class Contact {
 	prefix: string;
@@ -33,8 +34,20 @@ export class ContactDataProvider {
   favorites: ContactCall[] =[]  ;
   recentCalls: ContactCall[]=[] ;
 
-  constructor(public http: Http) {
+  constructor(public http: Http,private storage:Storage) {
     console.log('Initiation Contact Data Provider');
+    this.storage.ready().then(() => {
+      this.storage.get('Favorites').then((data)=>{
+        if(data){
+          this.favorites = data;
+        }
+      })
+      this.storage.get('RecentCalls').then((data)=>{
+        if(data){
+          this.recentCalls = data;
+        }
+      })
+    });
   }
 
   getContactUrl(): string {
@@ -53,6 +66,7 @@ export class ContactDataProvider {
   addRecentCall(newCall: ContactCall){
   	//this.recentCalls.push(newCall) ;
     this.recentCalls.splice(0,0,newCall) ;
+    this.storage.set("RecentCalls",this.recentCalls)
   }
 
   getFavorites(): ContactCall[]{
@@ -61,6 +75,7 @@ export class ContactDataProvider {
 
   addFavorite(newFav: ContactCall){
     this.favorites.push(newFav) ;
+    this.storage.set("Favorites",this.favorites)
   }
 
 }

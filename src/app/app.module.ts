@@ -17,6 +17,7 @@ import { ContactDataProvider } from '../providers/contact-data/contact-data';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
+import { IonicStorageModule} from '@ionic/storage'
 import { Camera } from '@ionic-native/camera'
 import { Geolocation } from '@ionic-native/geolocation'
 import { CallNumber } from '@ionic-native/call-number'
@@ -35,7 +36,8 @@ import { ActionSheet } from '@ionic-native/action-sheet';
     BrowserModule,
     HttpModule,
     FormsModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
